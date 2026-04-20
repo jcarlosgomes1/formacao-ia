@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formação em IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+:root{
+  --ink:#0A0A14;--ink2:#1A1A2E;--ink3:#253558;
+  --accent:#6C3CE1;--accentH:#7d50f0;--accent2:#E1A83C;
+  --surf:#F5F4F0;--surf2:#ECEAE4;
+  --white:#fff;--muted:#7A7870;
+  --bdr:rgba(10,10,20,.1);--bdr2:rgba(10,10,20,.06);
+  --teal:#1D9E75;--red:#E24B4A;
+  --r:12px;--sw:240px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--surf);color:var(--ink);min-height:100vh}
+h1,h2,h3,h4{font-family:'Syne',sans-serif}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ── AUTH ── */
+#auth{min-height:100vh;display:flex;flex-direction:column;background:var(--ink2);position:relative;overflow:hidden}
+.abg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 60% at 65% 20%,rgba(108,60,225,.4),transparent 65%),radial-gradient(ellipse 50% 40% at 5% 85%,rgba(225,168,60,.25),transparent 60%)}
+.adots{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);background-size:32px 32px}
+.arel{position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh}
+.ahdr{padding:1.5rem 2rem;display:flex;align-items:center;gap:10px}
+.lmark{width:36px;height:36px;background:var(--accent);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.lmark svg{width:18px;height:18px;stroke:white;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ltxt{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:white}
+.ltxt em{font-style:normal;color:var(--accent2)}
+.abody{flex:1;display:flex;align-items:center;justify-content:center;padding:1.5rem;gap:3.5rem;flex-wrap:wrap}
+.apitch{max-width:340px;color:white}
+.apitch-tag{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent2);margin-bottom:.6rem}
+.apitch h1{font-size:clamp(26px,5vw,38px);font-weight:800;line-height:1.1;margin-bottom:.9rem}
+.apitch h1 em{font-style:normal;color:var(--accent2)}
+.apitch p{font-size:13px;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:1.25rem}
+.afeats{display:flex;flex-direction:column;gap:.45rem}
+.afeat{font-size:12.5px;color:rgba(255,255,255,.6);display:flex;align-items:center;gap:7px}
+.afeat::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent2);flex-shrink:0}
+.acard{background:rgba(255,255,255,.07);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.11);border-radius:20px;padding:2.25rem;width:100%;max-width:390px;animation:up .5s ease both}
+.acard-t{font-size:19px;font-weight:700;color:white;margin-bottom:.2rem}
+.acard-s{font-size:13px;color:rgba(255,255,255,.4);margin-bottom:1.5rem;line-height:1.5}
+.fg{margin-bottom:.875rem}
+.fl{font-size:11px;font-weight:600;letter-spacing:.05em;color:rgba(255,255,255,.5);display:block;margin-bottom:4px}
+.fi{width:100%;padding:10px 12px;border-radius:9px;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.07);color:white;font-size:14px;font-family:'Inter',sans-serif;transition:border .2s,background .2s}
+.fi::placeholder{color:rgba(255,255,255,.22)}
+.fi:focus{outline:none;border-color:var(--accent);background:rgba(255,255,255,.11)}
+.ferr{font-size:12px;color:#ff6b6b;margin-top:.3rem;display:none}
+.ferr.v{display:block}
+.bp{width:100%;padding:12px;border-radius:9px;border:none;background:var(--accent);color:white;font-size:14px;font-weight:600;font-family:'Syne',sans-serif;cursor:pointer;transition:all .2s;letter-spacing:.02em;margin-top:.4rem}
+.bp:hover{background:var(--accentH);transform:translateY(-1px)}
+.bp:active{transform:none}
+.bg{width:100%;padding:10px;border-radius:9px;background:transparent;border:1px solid rgba(255,255,255,.17);color:rgba(255,255,255,.6);font-size:13px;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;margin-top:.4rem}
+.bg:hover{border-color:rgba(255,255,255,.38);color:white}
+.alink{font-size:12px;color:rgba(255,255,255,.35);margin-top:.65rem;text-align:center}
+.alink span{color:var(--accent2);cursor:pointer}
+.alink span:hover{text-decoration:underline}
+.div{display:flex;align-items:center;gap:.65rem;margin:.65rem 0}
+.div::before,.div::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08)}
+.div span{font-size:11px;color:rgba(255,255,255,.22)}
+
+/* ── INVITE ── */
+#inv{display:none;min-height:100vh;background:var(--ink2);align-items:center;justify-content:center;padding:1rem}
+.icard{background:rgba(255,255,255,.07);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.11);border-radius:20px;padding:2.25rem;max-width:400px;width:100%;text-align:center;animation:up .4s ease}
+.icard h2{font-family:'Syne',sans-serif;font-size:21px;font-weight:800;color:white;margin:.75rem 0 .4rem}
+.icard p{font-size:13px;color:rgba(255,255,255,.45);line-height:1.6;margin-bottom:1.25rem}
+.icurs{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:.875rem;margin-bottom:1.25rem;text-align:left}
+.icurs .lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);margin-bottom:.25rem}
+.icurs .nm{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:white}
+.icurs .tm{font-size:12px;color:rgba(255,255,255,.4);margin-top:.2rem}
+
+/* ── ADMIN ── */
+#admin{display:none;min-height:100vh}
+.alayout{display:flex;min-height:100vh}
+.sidebar{width:var(--sw);flex-shrink:0;background:var(--ink2);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sbrand{padding:1.25rem 1.1rem .875rem;border-bottom:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;gap:.4rem}
+.stag{font-size:10px;color:rgba(255,255,255,.25);letter-spacing:.06em}
+.snav{flex:1;padding:.5rem .6rem}
+.ssec{padding:.65rem .75rem .2rem;font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.22)}
+.sitem{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:8px;font-size:12.5px;font-weight:500;color:rgba(255,255,255,.5);cursor:pointer;transition:all .15s;margin-bottom:1px;border:none;background:none;width:100%;text-align:left}
+.sitem:hover{color:white;background:rgba(255,255,255,.07)}
+.sitem.act{color:white;background:rgba(108,60,225,.32)}
+.sitem.act .sico{color:var(--accent2)}
+.sico{font-size:14px;width:17px;text-align:center;flex-shrink:0}
+.sfoot{padding:.875rem;border-top:1px solid rgba(255,255,255,.07)}
+.suser{display:flex;align-items:center;gap:8px}
+.sav{width:30px;height:30px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;flex-shrink:0}
+.snm{font-size:12px;color:rgba(255,255,255,.65);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sout{font-size:11px;color:rgba(255,255,255,.25);background:none;border:none;cursor:pointer;padding:2px;transition:color .15s}
+.sout:hover{color:rgba(255,255,255,.7)}
+.acont{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--surf)}
+.atopbar{background:var(--white);border-bottom:1px solid var(--bdr2);padding:0 1.5rem;height:56px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:50}
+.atopbar h2{font-size:15px;font-weight:700;flex:1}
+.amain{padding:1.5rem;flex:1}
+
+/* ── STUDENT ── */
+#student{display:none;min-height:100vh;background:var(--surf)}
+.stopbar{background:var(--ink2);height:56px;display:flex;align-items:center;padding:0 1.5rem;gap:12px;position:sticky;top:0;z-index:50}
+.stopbar .ltxt{font-size:13px}
+.stspc{flex:1}
+.stuser{display:flex;align-items:center;gap:8px}
+.stav{width:30px;height:30px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white}
+.stunm{font-size:12px;color:rgba(255,255,255,.55)}
+.bout{font-size:11px;color:rgba(255,255,255,.28);background:none;border:none;cursor:pointer;padding:2px 6px;border-radius:5px;transition:all .15s}
+.bout:hover{color:white;background:rgba(255,255,255,.08)}
+.smain{max-width:820px;margin:0 auto;padding:1.75rem 1.25rem 3rem}
+
+/* ── SHARED ── */
+.pghdr{margin-bottom:1.5rem}
+.pghdr h1{font-size:22px;font-weight:800;margin-bottom:.2rem}
+.pghdr p{font-size:13px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:1.5rem}
+.stat{background:var(--white);border:1px solid var(--bdr2);border-radius:var(--r);padding:1rem 1.1rem}
+.stv{font-family:'Syne',sans-serif;font-size:28px;font-weight:800}
+.stl{font-size:12px;color:var(--muted);margin-top:1px}
+.sechdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.sectit{font-size:13px;font-weight:700}
+.badd{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:6px 12px;border-radius:8px;border:1.5px solid var(--accent);color:var(--accent);background:transparent;cursor:pointer;transition:all .15s;font-family:'Syne',sans-serif}
+.badd:hover{background:var(--accent);color:white}
+.bsm{font-size:12px;font-weight:500;padding:6px 12px;border-radius:8px;cursor:pointer;transition:all .15s;border:1px solid var(--bdr);background:var(--white);color:var(--ink);font-family:'Inter',sans-serif}
+.bsm:hover{border-color:var(--ink)}
+.bsm.p{background:var(--accent);color:white;border-color:var(--accent)}
+.bsm.p:hover{background:var(--accentH)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.card{background:var(--white);border:1px solid var(--bdr2);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .2s}
+.card:hover{transform:translateY(-2px);box-shadow:0 5px 20px rgba(0,0,0,.08)}
+.cband{height:4px}
+.cband.pu{background:var(--accent)}
+.cband.am{background:var(--accent2)}
+.cband.te{background:var(--teal)}
+.cband.re{background:var(--red)}
+.cbody{padding:1rem 1.1rem}
+.ccode{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.25rem}
+.cname{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;line-height:1.3;margin-bottom:.35rem}
+.cdesc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:.6rem}
+.cfoot{display:flex;align-items:center;justify-content:space-between}
+.cmeta{font-size:11px;color:var(--muted)}
+.badge{font-size:10px;font-weight:600;padding:3px 7px;border-radius:6px}
+.bg-g{background:#d5f5e3;color:#0f6e56}
+.bg-gr{background:var(--surf2);color:var(--muted)}
+.bg-p{background:#ede9fe;color:#5b21b6}
+.panel{background:var(--white);border:1px solid var(--bdr2);border-radius:var(--r);padding:1.1rem 1.25rem}
+.ptit{font-size:13px;font-weight:700;margin-bottom:.875rem}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:660px){.two{grid-template-columns:1fr}}
+.back{display:inline-flex;align-items:center;gap:5px;font-size:13px;color:var(--muted);background:none;border:none;cursor:pointer;margin-bottom:1.1rem;padding:0}
+.back:hover{color:var(--ink)}
+.thdr{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1.25rem;flex-wrap:wrap}
+.thdr-i .tc{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.15rem}
+.thdr-i .tn{font-family:'Syne',sans-serif;font-size:19px;font-weight:800}
+.thdr-i .tm{font-size:12px;color:var(--muted);margin-top:.15rem}
+.thdr-a{display:flex;gap:7px;flex-wrap:wrap;padding-top:3px}
+.srow{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:.5px solid var(--surf2)}
+.srow:last-child{border-bottom:none}
+.snum{width:25px;height:25px;border-radius:7px;background:var(--surf2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--muted);flex-shrink:0}
+.snum.on{background:var(--accent);color:white}
+.sinf{flex:1;min-width:0}
+.stitle{font-size:12px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sdate{font-size:11px;color:var(--muted)}
+.tog{position:relative;width:38px;height:21px;border-radius:11px;border:none;cursor:pointer;transition:background .2s;flex-shrink:0}
+.tog.on{background:var(--accent)}
+.tog.off{background:var(--surf2)}
+.tog::after{content:'';position:absolute;top:3px;width:15px;height:15px;border-radius:50%;background:white;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.tog.on::after{left:20px}
+.tog.off::after{left:3px}
+.arow{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:.5px solid var(--surf2)}
+.arow:last-child{border-bottom:none}
+.aav{width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;flex-shrink:0}
+.ainf{flex:1;min-width:0}
+.anm{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.aem{font-size:11px;color:var(--muted)}
+.pmini{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.pbar{width:50px;height:3px;background:var(--surf2);border-radius:2px;overflow:hidden}
+.pfill{height:100%;background:var(--teal);border-radius:2px}
+.ppct{font-size:10px;color:var(--muted);min-width:24px;text-align:right}
+.cbox{background:var(--surf);border:1px dashed var(--bdr);border-radius:9px;padding:.8rem;margin-top:.65rem}
+.clink{font-size:11px;font-family:monospace;color:var(--accent);word-break:break-all;line-height:1.5}
+.cbtn{font-size:11px;color:var(--muted);background:var(--white);border:1px solid var(--bdr2);border-radius:6px;padding:4px 8px;cursor:pointer;margin-top:.4rem;transition:all .15s}
+.cbtn:hover{color:var(--ink);border-color:var(--ink)}
+.ptbl{width:100%;border-collapse:collapse}
+.ptbl th{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:5px 7px;text-align:left;border-bottom:1px solid var(--bdr2)}
+.ptbl td{font-size:12px;padding:7px;border-bottom:.5px solid var(--surf2);vertical-align:middle}
+.ptbl tr:last-child td{border-bottom:none}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin:0 1px}
+.dot.done{background:var(--teal)}
+.dot.todo{background:var(--surf2)}
+.empty{text-align:center;padding:2.25rem 1rem;color:var(--muted)}
+.empty .ei{font-size:30px;margin-bottom:.5rem}
+.empty p{font-size:13px;line-height:1.5}
+.loading{text-align:center;padding:2rem;color:var(--muted);font-size:13px}
+
+/* ── STUDENT COMPONENTS ── */
+.shero{background:var(--ink2);border-radius:16px;padding:1.5rem 1.75rem;margin-bottom:1.25rem;position:relative;overflow:hidden}
+.shero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 90% 40%,rgba(108,60,225,.35),transparent);pointer-events:none}
+.shero-rel{position:relative}
+.shero-tag{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);margin-bottom:.35rem}
+.shero-t{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;color:white;margin-bottom:.3rem;line-height:1.2}
+.shero-s{font-size:12px;color:rgba(255,255,255,.45)}
+.sprog{margin-top:.9rem}
+.sprog-lbl{font-size:11px;color:rgba(255,255,255,.4);display:flex;justify-content:space-between;margin-bottom:.3rem}
+.sprog-bar{height:4px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden}
+.sprog-fill{height:100%;background:var(--accent2);border-radius:2px;transition:width .5s}
+.scards{display:flex;flex-direction:column;gap:9px}
+.sc{background:var(--white);border:1px solid var(--bdr2);border-radius:var(--r);overflow:hidden}
+.schdr{display:flex;align-items:center;gap:11px;padding:.8rem 1rem;cursor:pointer;transition:background .15s}
+.schdr:hover{background:var(--surf)}
+.scbadge{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;flex-shrink:0}
+.scbadge.locked{background:var(--surf2);color:var(--muted)}
+.scbadge.open{background:var(--accent);color:white}
+.scbadge.done{background:var(--teal);color:white}
+.scinfo{flex:1;min-width:0}
+.sct{font-size:13px;font-weight:600;color:var(--ink)}
+.scm{font-size:11px;color:var(--muted);margin-top:1px}
+.scprog{color:var(--teal);font-weight:600}
+.scarr{font-size:10px;color:var(--muted);transition:transform .2s;flex-shrink:0}
+.scarr.op{transform:rotate(180deg)}
+.scbody{display:none;border-top:1px solid var(--bdr2)}
+.scbody.op{display:block}
+.passo{display:flex;gap:10px;padding:.8rem 1rem;border-bottom:.5px solid var(--surf2);align-items:flex-start}
+.passo:last-child{border-bottom:none}
+.pchk{width:21px;height:21px;border-radius:50%;border:2px solid var(--bdr);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all .2s;margin-top:1px;font-size:11px;font-weight:700}
+.pchk:hover{border-color:var(--teal)}
+.pchk.done{background:var(--teal);border-color:var(--teal);color:white}
+.pbody{flex:1;min-width:0}
+.ptitle{font-size:13px;font-weight:500;line-height:1.4}
+.pexp{font-size:11px;color:var(--accent);background:none;border:none;cursor:pointer;padding:0;margin-top:3px;display:block}
+.pexp:hover{text-decoration:underline}
+.pdet{display:none;margin-top:.4rem}
+.pdet.op{display:block}
+.psubs{list-style:none}
+.psubs li{font-size:12px;color:var(--muted);padding:2px 0 2px 12px;position:relative;line-height:1.55}
+.psubs li::before{content:"→";position:absolute;left:0;font-size:9px;top:4px}
+.psubs li code{background:var(--surf2);padding:1px 5px;border-radius:3px;font-size:11px;font-family:monospace;color:var(--accent)}
+.psubs li strong{color:var(--ink);font-weight:600}
+
+/* ── MODAL ── */
+.moverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;align-items:center;justify-content:center;padding:1rem}
+.moverlay.op{display:flex}
+.modal{background:var(--white);border-radius:16px;padding:1.6rem;max-width:440px;width:100%;animation:up .25s ease}
+.modal h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:.2rem}
+.msub{font-size:13px;color:var(--muted);margin-bottom:1.1rem;line-height:1.5}
+.mfg{margin-bottom:.75rem}
+.mfl{font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--muted);display:block;margin-bottom:3px}
+.mfi{width:100%;padding:9px 11px;border:1px solid var(--bdr);border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;color:var(--ink);transition:border .2s}
+.mfi:focus{outline:none;border-color:var(--accent)}
+.macts{display:flex;gap:7px;justify-content:flex-end;margin-top:1.1rem}
+.bcancel{padding:7px 14px;border-radius:8px;border:1px solid var(--bdr);background:transparent;color:var(--muted);font-size:12.5px;cursor:pointer}
+.bconfirm{padding:7px 14px;border-radius:8px;border:none;background:var(--accent);color:white;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif}
+.bconfirm:hover{background:var(--accentH)}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:1.1rem;right:1.1rem;z-index:999}
+.tmsg{background:var(--ink);color:white;padding:8px 13px;border-radius:9px;font-size:13px;margin-top:6px;animation:up .25s ease;display:flex;align-items:center;gap:6px;box-shadow:0 3px 16px rgba(0,0,0,.22)}
+.tmsg.s::before{content:'✓';color:var(--teal);font-weight:700}
+.tmsg.e::before{content:'✗';color:var(--red);font-weight:700}
+</style>
+</head>
+<body>
+
+<!-- AUTH -->
+<div id="auth">
+  <div class="abg"></div><div class="adots"></div>
+  <div class="arel">
+    <div class="ahdr">
+      <div class="lmark"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+      <span class="ltxt">Formação em <em>IA</em></span>
+    </div>
+    <div class="abody">
+      <div class="apitch">
+        
+        <h1>Aprende a automatizar com <em>Inteligência Artificial</em></h1>
+        <p>Plataforma de apoio à formação em Power Query, Power Automate e IA Generativa.</p>
+        <div class="afeats">
+          <div class="afeat">Guias passo a passo por sessão</div>
+          <div class="afeat">Progresso individual guardado</div>
+          <div class="afeat">Sessões controladas pelo formador</div>
+          <div class="afeat">Acesso por convite seguro</div>
+          <div class="afeat">Gestão completa multi-curso</div>
+        </div>
+      </div>
+      <div id="af-login" class="acard">
+        <div class="acard-t">Entrar na plataforma</div>
+        <div class="acard-s">Alunos e formadores usam o mesmo login.</div>
+        <div class="fg"><label class="fl">Email</label><input class="fi" id="le" type="email" placeholder="nome@email.com" autocomplete="email"></div>
+        <div class="fg"><label class="fl">Password</label><input class="fi" id="lp" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+        <p class="ferr" id="lerr">Email ou password incorrectos.</p>
+        <button class="bp" onclick="doLogin()">Entrar</button>
+        <p class="alink"><span onclick="showAuth('af-forgot')">Esqueci a password</span></p>
+        <div class="div"><span>ou</span></div>
+        <button class="bg" onclick="showAuth('af-reg')">Criar conta</button>
+      </div>
+      <div id="af-reg" class="acard" style="display:none">
+        <div class="acard-t">Criar conta</div>
+        <div class="acard-s">Usa o email do convite que recebeste do formador.</div>
+        <div class="fg"><label class="fl">Nome completo</label><input class="fi" id="rn" type="text" placeholder="João Silva"></div>
+        <div class="fg"><label class="fl">Email</label><input class="fi" id="re" type="email" placeholder="nome@email.com"></div>
+        <div class="fg"><label class="fl">Password (mín. 8 caracteres)</label><input class="fi" id="rp" type="password" placeholder="••••••••"></div>
+        <p class="ferr" id="rerr">Verifica os dados e tenta novamente.</p>
+        <button class="bp" onclick="doReg()">Criar conta</button>
+        <p class="alink">Já tens conta? <span onclick="showAuth('af-login')">Entrar</span></p>
+      </div>
+      <div id="af-forgot" class="acard" style="display:none">
+        <div class="acard-t">Recuperar password</div>
+        <div class="acard-s">Enviamos um link para o teu email para definires uma nova password.</div>
+        <div class="fg"><label class="fl">Email</label><input class="fi" id="fe" type="email" placeholder="nome@email.com"></div>
+        <p class="ferr" id="ferr">Email não encontrado.</p>
+        <button class="bp" onclick="doForgot()">Enviar link</button>
+        <p class="alink"><span onclick="showAuth('af-login')">← Voltar ao login</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INVITE -->
+<div id="inv">
+  <div class="icard">
+    <div style="font-size:38px">🎓</div>
+    <h2>Convite para formação</h2>
+    <p>Foste convidado para participar num curso. Cria uma conta ou faz login para aceitar.</p>
+    <div class="icurs" id="ic-info" style="display:none">
+      <div class="lbl">Curso</div>
+      <div class="nm" id="ic-curso"></div>
+      <div class="tm" id="ic-turma"></div>
+    </div>
+    <button class="bp" onclick="goAccept()">Aceitar convite e entrar</button>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="admin">
+  <div class="alayout">
+    <aside class="sidebar">
+      <div class="sbrand">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="lmark"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <span class="ltxt">Formação em <em>IA</em></span>
+        </div>
+        <span class="stag">Área de Gestão</span>
+      </div>
+      <div class="snav">
+        <div class="ssec">Principal</div>
+        <button class="sitem act" id="sn-db" onclick="aNav('db')"><span class="sico">◈</span>Dashboard</button>
+        <button class="sitem" id="sn-cu" onclick="aNav('cu')"><span class="sico">◉</span>Cursos</button>
+        <div class="ssec" style="margin-top:.4rem" id="ssec-turma" style="display:none">Turma seleccionada</div>
+        <button class="sitem" id="sn-se" onclick="aNav('se')" style="display:none"><span class="sico">▦</span>Sessões</button>
+        <button class="sitem" id="sn-al" onclick="aNav('al')" style="display:none"><span class="sico">◎</span>Alunos</button>
+        <button class="sitem" id="sn-pr" onclick="aNav('pr')" style="display:none"><span class="sico">◐</span>Progresso</button>
+        <button class="sitem" id="sn-co" onclick="aNav('co')" style="display:none"><span class="sico">⊕</span>Convites</button>
+      </div>
+      <div class="sfoot">
+        <div class="suser">
+          <div class="sav" id="sav"></div>
+          <span class="snm" id="snm"></span>
+          <button class="sout" onclick="doLogout()" title="Sair">⏻</button>
+        </div>
+      </div>
+    </aside>
+    <div class="acont">
+      <div class="atopbar">
+        <h2 id="atit">Dashboard</h2>
+        <div id="atacts"></div>
+      </div>
+      <div class="amain" id="amain"><div class="loading">A carregar...</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- STUDENT -->
+<div id="student">
+  <nav class="stopbar">
+    <div class="lmark"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+    <span class="ltxt">Formação em <em>IA</em></span>
+    <div class="stspc"></div>
+    <div class="stuser">
+      <span class="stunm" id="stunm"></span>
+      <div class="stav" id="stav"></div>
+      <button class="bout" onclick="doLogout()">Sair</button>
+    </div>
+  </nav>
+  <div class="smain" id="smain"><div class="loading">A carregar...</div></div>
+</div>
+
+<!-- MODALS -->
+<div class="moverlay" id="mc"><div class="modal">
+  <h3>Novo curso</h3><p class="msub">Adiciona um novo curso à plataforma.</p>
+  <div class="mfg"><label class="mfl">Código</label><input class="mfi" id="mc-c" placeholder="ex: FB465"></div>
+  <div class="mfg"><label class="mfl">Nome</label><input class="mfi" id="mc-n" placeholder="ex: Power BI para Gestores"></div>
+  <div class="mfg"><label class="mfl">Descrição</label><input class="mfi" id="mc-d" placeholder="Descrição breve do curso"></div>
+  <div class="macts"><button class="bcancel" onclick="closeM('mc')">Cancelar</button><button class="bconfirm" onclick="criarCurso()">Criar</button></div>
+</div></div>
+<div class="moverlay" id="mt"><div class="modal">
+  <h3>Nova turma</h3><p class="msub" id="mt-s"></p>
+  <div class="mfg"><label class="mfl">Código</label><input class="mfi" id="mt-c" placeholder="ex: FB464/002"></div>
+  <div class="mfg"><label class="mfl">Nome / Descrição</label><input class="mfi" id="mt-n" placeholder="ex: Turma 2 — Out 2026"></div>
+  <div class="mfg"><label class="mfl">Data início</label><input class="mfi" id="mt-i" type="date"></div>
+  <div class="mfg"><label class="mfl">Data fim</label><input class="mfi" id="mt-f" type="date"></div>
+  <div class="macts"><button class="bcancel" onclick="closeM('mt')">Cancelar</button><button class="bconfirm" onclick="criarTurma()">Criar</button></div>
+</div></div>
+
+<div id="toast"></div>
+
+<script>
+const SU='https://kkflgixrosboatvxkech.supabase.co';
+const SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtrZmxnaXhyb3Nib2F0dnhrZWNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0MjMwNzcsImV4cCI6MjA5MTk5OTA3N30.Ua2keXNoquOoSc39iuqaEeDZVhsd9NUoeBaw_ufqM6E';
+const sb=supabase.createClient(SU,SK);
+let G={user:null,perfil:null,turma:null,curso:null,invTok:null};
+
+const SD=[
+  {n:1,t:'Automação e IA — Conceitos',p:[
+    {t:'Parte 1 · Individual · 15 min',s:['Listar 5 tarefas repetitivas no Excel','Estimar o tempo semanal gasto em cada uma']},
+    {t:'Parte 2 · Pares · 15 min',s:['Categorizar cada tarefa: <strong>Power Query</strong> / <strong>Power Automate</strong> / <strong>IA</strong>','Uma tarefa pode pertencer a mais do que uma categoria']},
+    {t:'Parte 3 · Plenário · 30 min',s:['Cada par partilha os 2 casos com maior potencial','Construir lista priorizada coletiva — fio condutor do curso']}
+  ]},
+  {n:2,t:'Power Query — Fundamentos',p:[
+    {t:'Passo 1 · Importar o ficheiro · 15 min',s:['Abrir o Excel → criar livro em branco','Separador <code>Dados</code> → <strong>Obter Dados</strong> → <code>De Ficheiro → De Texto/CSV</code>','Seleccionar <code>S02_vendas_mensais.csv</code> → clicar <strong>Transformar Dados</strong>','Explorar os 4 painéis: Consultas · Pré-visualização · Passos Aplicados · Barra de fórmulas']},
+    {t:'Passo 2 · Transformar os dados · 25 min',s:['<strong>Filtrar Estado:</strong> seta ▼ no cabeçalho Estado → Desmarcar tudo → <code>Em aberto</code> → OK','<strong>Corrigir Data_Emissao:</strong> botão direito → <code>Com Locale</code> → Tipo: <code>Data</code> · Locale: <code>Português (Portugal)</code>','<strong>Corrigir Valor:</strong> botão direito → <code>Com Locale</code> → Tipo: <code>Número Decimal</code> · Locale: <code>Inglês (EUA)</code>','<strong>Corrigir NIF_Cliente:</strong> botão direito → <code>Alterar Tipo → Texto</code>','<strong>Remover duplicados:</strong> seleccionar coluna ID_Fatura → <code>Início → Remover Linhas → Remover Duplicados</code>','<strong>Renomear colunas:</strong> duplo clique em cada cabeçalho → renomear para português']},
+    {t:'Passo 3 · Carregar e testar · 20 min',s:['<code>Início → Fechar e Carregar</code>','Verificar ícones: calendário na data · número no valor','<code>Dados → Atualizar Tudo</code> → confirmar que corre sem erros']}
+  ]},
+  {n:3,t:'Power Query — Avançado',p:[
+    {t:'Passo 1 · Combinar ficheiros · 20 min',s:['Criar pasta <code>Faturas_2026</code> no ambiente de trabalho','Copiar <code>jan_2026.xlsx</code>, <code>fev_2026.xlsx</code>, <code>mar_2026.xlsx</code> para a pasta','Excel → <code>Dados → Obter Dados → De Ficheiro → Da Pasta</code>','Seleccionar a pasta → <strong>Combinar e Transformar Dados</strong>','Seleccionar folha <strong>Faturas</strong> como referência → <strong>OK</strong>']},
+    {t:'Passo 2 · Intercalar com tabela de clientes · 25 min',s:['<strong>Importar Clientes como ligação:</strong> <code>Início → Nova Fonte → Do Livro do Excel</code> → <code>S04_faturas_sistema.xlsx</code> → folha Clientes → <strong>Só Criar Ligação</strong>','<strong>Voltar à consulta principal</strong> (clicar no nome no painel esquerdo)','<code>Início → Combinar → Intercalar Consultas</code>','Tabela de baixo: seleccionar <strong>Clientes</strong>','<strong>Coluna-chave:</strong> clicar <code>NIF_Cliente</code> em ambas as tabelas','Tipo: <strong>Associação Externa Esquerda</strong> → <strong>OK</strong>','<strong>Expandir:</strong> seta ↔ → desmarcar tudo → seleccionar <code>Nome_Cliente</code> · <code>Email</code> · <code>Gestor_Conta</code> → desmarcar prefixo → <strong>OK</strong>','Adicionar coluna condicional <code>Escalao_Risco</code>: >60=Crítico · >30=Atenção · Normal']},
+    {t:'Passo 3 · Validar automação · 15 min',s:['Fechar e Carregar','Copiar <code>S03_abr_2026.xlsx</code> para a pasta <code>Faturas_2026</code>','<code>Dados → Atualizar Tudo</code>','Confirmar que as linhas de Abril aparecem automaticamente']}
+  ]},
+  {n:4,t:'Power Query Aplicado + Intro Power Automate',p:[
+    {t:'Parte 1 · Power Query completo · 40 min',s:['Abrir <code>S04_faturas_sistema.xlsx</code>','<code>Dados → Obter Dados → Do Livro do Excel</code> → folha <strong>Faturas</strong> → Transformar Dados','Filtrar Estado = Em aberto','Corrigir tipos com Locale correcto · Adicionar <code>Escalao_Risco</code>','Importar Clientes como ligação → intercalar → expandir: Nome_Cliente · Email · Gestor_Conta','Fechar e Carregar → nomear tabela <code>Faturas_Resultado</code> · guardar no OneDrive']},
+    {t:'Parte 2 · Explorar Power Automate · 20 min',s:['Abrir <code>flow.microsoft.com</code>','Templates → pesquisar <code>Excel</code>','Identificar 1 template relevante · documentar: Gatilho · Condição · Acção']}
+  ]},
+  {n:5,t:'Power Automate — Primeiro Fluxo',p:[
+    {t:'Pré-requisitos · 10 min',s:['Abrir <code>office.com</code> → OneDrive → fazer upload de <code>S05_faturas_atraso.xlsx</code>','Abrir no Excel Online → confirmar tabela <strong>Faturas_EmAberto</strong> nomeada','Se não tiver nome: seleccionar dados → Inserir → Tabela → Design → escrever nome']},
+    {t:'Criar o fluxo agendado · 25 min',s:['<code>flow.microsoft.com</code> → <strong>+ Criar</strong> → <strong>Fluxo de nuvem agendado</strong>','Nome: <code>Alerta_Faturas_Atraso</code> · Repetir: <code>1 Dia</code> → Criar','Novo passo → <strong>Excel Online (Business)</strong> → <strong>Listar linhas presentes numa tabela</strong>','OneDrive for Business · <code>S05_faturas_atraso.xlsx</code> · tabela <code>Faturas_EmAberto</code>','Novo passo → <strong>Condição</strong> → <code>Dias_Atraso</code> é maior que <code>30</code>','Ramo Se sim → Outlook → <strong>Enviar um email (V2)</strong>','Para: o teu email · Assunto com <code>ID_Fatura</code> · Corpo com <code>Nome_Cliente</code> · <code>Valor</code> · <code>Dias_Atraso</code>','Guardar → Testar manualmente']},
+    {t:'Segunda condição · 20 min',s:['No ramo <strong>Se não</strong>: nova condição → <code>Dias_Atraso</code> é maior que <code>0</code>','Ramo Se sim: email de aviso preventivo','Testar → verificar 2 emails distintos']}
+  ]},
+  {n:6,t:'Power Automate Avançado + Introdução à IA',p:[
+    {t:'Parte 1 · Condições múltiplas · 30 min',s:['Upload de <code>S06_despesas.xlsx</code> para OneDrive','Novo fluxo agendado semanal → Listar linhas tabela <strong>Despesas</strong>','Condição: Valor > 2000 → email direcção · Se não → Valor > 500 → email responsável · Se não → aprovação automática','Guardar e Testar']},
+    {t:'Parte 2 · Primeiro prompt com IA · 30 min',s:['Abrir <code>chat.openai.com</code> ou <code>copilot.microsoft.com</code>','Copiar 10–15 linhas de Despesas — substituir nomes por Colaborador A, B, C','<strong>Teste 1:</strong> enviar <em>«Analisa estes dados»</em> sem estrutura — registar resultado vago','<strong>Teste 2:</strong> prompt com 4 componentes: <strong>Contexto</strong> + <strong>Dados</strong> + <strong>Instrução</strong> + <strong>Formato</strong>','Comparar os dois resultados · documentar o prompt mais útil']}
+  ]},
+  {n:7,t:'Excel + IA Generativa — Prompts',p:[
+    {t:'Passo 1 · Construir e testar · 20 min',s:['Abrir <code>S07_kpis_financeiros.xlsx</code>','Identificar 2 perguntas analíticas relevantes','Construir prompt: Contexto + Dados + Instrução + Formato','Testar · registar o resultado']},
+    {t:'Passo 2 · Técnicas avançadas · 20 min',s:['<strong>Few-shot:</strong> adicionar 3 exemplos antes da instrução','<strong>Chain of thought:</strong> pedir análise passo a passo em 3 etapas','<strong>Persona:</strong> <em>«Age como controller financeiro sénior»</em>','Iterar até resposta verdadeiramente útil']},
+    {t:'Passo 3 · Partilha coletiva · 20 min',s:['Cada participante partilha o prompt mais eficaz','Discutir o que foi necessário validar manualmente','Construir biblioteca partilhada de prompts']}
+  ]},
+  {n:8,t:'Análises Automáticas com IA',p:[
+    {t:'Passo 1 · Classificação automática · 20 min',s:['Abrir <code>S08_movimentos_caixa.xlsx</code>','Copiar 50 linhas de Descrição — substituir nomes próprios','Prompt few-shot com 8 exemplos: Combustível · Alimentação · Pessoal · Seguros · Energia · Clientes · Fornecedores · Outros','Testar · validar 5 categorias manualmente · importar como coluna <code>Categoria_IA</code>']},
+    {t:'Passo 2 · Resumo executivo · 20 min',s:['Prompt para resumo dos 6 meses: melhor mês · variações · 2 recomendações','<strong>VALIDAÇÃO OBRIGATÓRIA:</strong> verificar TODOS os números citados contra o ficheiro','Corrigir imprecisões antes de usar']},
+    {t:'Passo 3 · Comparação · 20 min',s:['Partilhar resumos gerados por 2–3 participantes','Comparar diferenças · discutir nível de validação necessário']}
+  ]},
+  {n:9,t:'Relatórios Inteligentes',p:[
+    {t:'Passo 1 · Dashboard · 20 min',s:['Abrir <code>S09_dados_consolidados.xlsx</code>','Folha Centros_Custo → <code>Inserir → Tabela Dinâmica → Nova Folha</code>','Centro_Custo nas linhas · Jan/Fev/Mar nos valores','Inserir gráfico de barras com evolução mensal','Formatação condicional: Desvio > 10% vermelho · < 0% verde']},
+    {t:'Passo 2 · Narrativa IA · 20 min',s:['Copiar dados da folha Centros_Custo — anonimizar','Prompt executivo: tendência · 3 maiores desvios · 2 recomendações','Testar · validar TODOS os dados · colar na célula <code>Resumo_IA</code>']},
+    {t:'Passo 3 · Apresentação · 20 min',s:['Cada participante apresenta o mini-relatório em 2 minutos','Feedback coletivo: legibilidade · rigor · utilidade para decisão']}
+  ]},
+  {n:10,t:'Segurança, Ética e Prova Final',p:[
+    {t:'Alínea 1 · Power Query · 40 pts',s:['Abrir <code>S10_prova_final.xlsx</code> → folha <strong>Dados_Prova</strong>','<code>Dados → Obter Dados → Do Livro do Excel</code> → folha Dados_Prova → Transformar Dados','Corrigir Data_Vencimento: <code>Com Locale → Data → Português (Portugal)</code>','Filtrar: apenas Estado = <code>Por Liquidar</code>','Coluna condicional <code>Escalao</code>: >60=Crítico · >30=Atenção · Normal','Fechar e Carregar → nomear tabela <code>Resultado_Prova</code>']},
+    {t:'Alínea 2 · Power Automate · 30 pts',s:['Descrever por escrito um fluxo baseado em <code>Resultado_Prova</code>','<strong>Obrigatório:</strong> tipo de gatilho e frequência','<strong>Obrigatório:</strong> critério da condição','<strong>Obrigatório:</strong> acção executada quando a condição é verdadeira']},
+    {t:'Alínea 3 · IA Generativa · 30 pts',s:['Prompt com 4 componentes: Contexto + Dados + Instrução + Formato','Deve analisar o resultado da Alínea 1','<strong>Obrigatório:</strong> conclusão principal · risco mais elevado · 1 recomendação','Apresentar o <strong>prompt escrito</strong> E o <strong>resultado obtido</strong>']}
+  ]}
+];
+
+// ── UTILS ──────────────────────────────────────────────────────────
+function toast(m,t='s'){const d=document.createElement('div');d.className=`tmsg ${t}`;d.textContent=m;document.getElementById('toast').appendChild(d);setTimeout(()=>d.remove(),3200)}
+function ini(s){return(s||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}
+function bandC(i){return['pu','am','te','re'][i%4]}
+function closeM(id){document.getElementById(id).classList.remove('op')}
+function openM(id){document.getElementById(id).classList.add('op')}
+function showAuth(id){['af-login','af-reg','af-forgot'].forEach(f=>document.getElementById(f).style.display=f===id?'block':'none')}
+function showOnly(id){['auth','inv','admin','student'].forEach(x=>{const el=document.getElementById(x);if(el)el.style.display=x===id?(id==='inv'?'flex':'block'):'none'})}
+
+// ── AUTH ──────────────────────────────────────────────────────────
+async function doLogin(){
+  const e=document.getElementById('le').value.trim(),p=document.getElementById('lp').value;
+  document.getElementById('lerr').classList.remove('v');
+  const{error}=await sb.auth.signInWithPassword({email:e,password:p});
+  if(error){document.getElementById('lerr').classList.add('v');return}
+  await boot();
+}
+async function doReg(){
+  const n=document.getElementById('rn').value.trim(),e=document.getElementById('re').value.trim(),p=document.getElementById('rp').value;
+  document.getElementById('rerr').classList.remove('v');
+  if(!n||!e||p.length<8){document.getElementById('rerr').classList.add('v');return}
+  const{error}=await sb.auth.signUp({email:e,password:p,options:{data:{nome:n}}});
+  if(error){document.getElementById('rerr').classList.add('v');return}
+  toast('Conta criada! Verifica o teu email.','s');showAuth('af-login');
+}
+async function doForgot(){
+  const e=document.getElementById('fe').value.trim();
+  document.getElementById('ferr').classList.remove('v');
+  const{error}=await sb.auth.resetPasswordForEmail(e,{redirectTo:location.origin+'?reset=1'});
+  if(error){document.getElementById('ferr').classList.add('v');return}
+  toast('Link de recuperação enviado!','s');showAuth('af-login');
+}
+async function doLogout(){
+  await sb.auth.signOut();
+  G={user:null,perfil:null,turma:null,curso:null,invTok:null};
+  showOnly('auth');showAuth('af-login');
+}
+
+// ── BOOT ──────────────────────────────────────────────────────────
+async function boot(){
+  const{data:{user}}=await sb.auth.getUser();
+  if(!user){showOnly('auth');return}
+  G.user=user;
+  const{data:p}=await sb.from('perfis').select('*').eq('id',user.id).single();
+  G.perfil=p;
+  if(G.invTok)await processInvite();
+  if(p?.role==='formador'){
+    showOnly('admin');
+    document.getElementById('sav').textContent=ini(p?.nome||user.email);
+    document.getElementById('snm').textContent=p?.nome||user.email.split('@')[0];
+    aNav('db');
+  } else {
+    showOnly('student');
+    document.getElementById('stav').textContent=ini(p?.nome||user.email);
+    document.getElementById('stunm').textContent=p?.nome||user.email.split('@')[0];
+    await loadStudent();
+  }
+}
+
+// ── ADMIN NAV ─────────────────────────────────────────────────────
+const ATITLES={db:'Dashboard',cu:'Cursos',se:'Sessões',al:'Alunos',pr:'Progresso',co:'Convites'};
+function aNav(v){
+  document.querySelectorAll('.sitem').forEach(b=>b.classList.remove('act'));
+  const el=document.getElementById('sn-'+v);if(el)el.classList.add('act');
+  document.getElementById('atit').textContent=ATITLES[v]||v;
+  document.getElementById('atacts').innerHTML='';
+  document.getElementById('amain').innerHTML='<div class="loading">A carregar...</div>';
+  if(v==='db')rDash();
+  else if(v==='cu')rCursos();
+  else if(v==='se')rSessoes();
+  else if(v==='al')rAlunos();
+  else if(v==='pr')rProg();
+  else if(v==='co')rConvites();
+}
+function showTurmaNav(s){
+  ['se','al','pr','co'].forEach(id=>{
+    const el=document.getElementById('sn-'+id);
+    if(el)el.style.display=s?'flex':'none';
+  });
+  const sec=document.getElementById('ssec-turma');
+  if(sec)sec.style.display=s?'block':'none';
+}
+
+// ── ADMIN VIEWS ───────────────────────────────────────────────────
+async function rDash(){
+  const[{data:cu},{data:tu},{data:al},{data:pr}]=await Promise.all([
+    sb.from('cursos').select('id').eq('ativo',true),
+    sb.from('turmas').select('id').eq('ativa',true),
+    sb.from('inscricoes').select('id'),
+    sb.from('progresso').select('id')
+  ]);
+  document.getElementById('amain').innerHTML=`
+  <div class="pghdr"><h1>Dashboard</h1><p>Visão geral da plataforma de formação</p></div>
+  <div class="stats">
+    <div class="stat"><div class="stv">${cu?.length||0}</div><div class="stl">Cursos activos</div></div>
+    <div class="stat"><div class="stv">${tu?.length||0}</div><div class="stl">Turmas activas</div></div>
+    <div class="stat"><div class="stv">${al?.length||0}</div><div class="stl">Alunos inscritos</div></div>
+    <div class="stat"><div class="stv">${pr?.length||0}</div><div class="stl">Passos concluídos</div></div>
+  </div>
+  <div class="sechdr"><span class="sectit">Acesso rápido</span></div>
+  <div class="cards">
+    <div class="card" onclick="aNav('cu')"><div class="cband pu"></div><div class="cbody"><div class="ccode">Cursos</div><div class="cname">Gerir cursos e turmas</div><div class="cdesc">Criar novos cursos, adicionar turmas e configurar sessões.</div></div></div>
+    <div class="card" onclick="aNav('al')"><div class="cband te"></div><div class="cbody"><div class="ccode">Alunos</div><div class="cname">Ver alunos inscritos</div><div class="cdesc">Consultar os alunos de cada turma e o seu estado.</div></div></div>
+    <div class="card" onclick="aNav('pr')"><div class="cband am"></div><div class="cbody"><div class="ccode">Progresso</div><div class="cname">Acompanhar em tempo real</div><div class="cdesc">Ver o que cada aluno já concluiu em cada sessão.</div></div></div>
+    <div class="card" onclick="aNav('co')"><div class="cband re"></div><div class="cbody"><div class="ccode">Convites</div><div class="cname">Gerar links de convite</div><div class="cdesc">Criar links únicos para inscrever alunos nas turmas.</div></div></div>
+  </div>`;
+}
+
+async function rCursos(){
+  const{data:cs}=await sb.from('cursos').select('*,turmas(id,codigo,nome,ativa,data_inicio,data_fim)').eq('ativo',true);
+  document.getElementById('atacts').innerHTML=`<button class="badd" onclick="openM('mc')">+ Novo curso</button>`;
+  const m=document.getElementById('amain');
+  if(!cs?.length){m.innerHTML='<div class="empty"><div class="ei">📚</div><p>Nenhum curso criado ainda.</p></div>';return}
+  m.innerHTML=`<div class="pghdr"><h1>Cursos</h1><p>Todos os cursos e turmas da plataforma</p></div>`+
+  cs.map((c,ci)=>`
+  <div style="margin-bottom:1.75rem">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.65rem">
+      <div><div class="ccode" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)">${c.codigo}</div><div style="font-family:Syne,sans-serif;font-size:16px;font-weight:800">${c.nome}</div></div>
+      <button class="badd" onclick="openMT('${c.id}','${(c.nome||'').replace(/'/g,"\\'")}')">+ Nova turma</button>
+    </div>
+    <div class="cards">
+      ${(c.turmas||[]).map(t=>`<div class="card" onclick="selTurma('${t.id}')"><div class="cband ${bandC(ci)}"></div><div class="cbody"><div class="ccode">${t.codigo}</div><div class="cname">${t.nome}</div><div class="cfoot" style="margin-top:.4rem"><span class="cmeta">${t.data_inicio||''}${t.data_fim?' → '+t.data_fim:''}</span><span class="badge ${t.ativa?'bg-g':'bg-gr'}">${t.ativa?'Activa':'Arquivada'}</span></div></div></div>`).join('')}
+      ${!(c.turmas?.length)?`<div style="background:var(--white);border:1px dashed var(--bdr);border-radius:var(--r);padding:1.25rem;text-align:center;color:var(--muted);font-size:13px;cursor:pointer" onclick="openMT('${c.id}','${(c.nome||'').replace(/'/g,"\\'")}')">+ Criar primeira turma</div>`:''}
+    </div>
+  </div>`).join('');
+}
+
+async function selTurma(id){
+  const{data:t}=await sb.from('turmas').select('*,cursos(nome,codigo)').eq('id',id).single();
+  G.turma=t;showTurmaNav(true);aNav('se');
+}
+
+async function rSessoes(){
+  if(!G.turma){document.getElementById('amain').innerHTML='<div class="empty"><p>Selecciona uma turma em Cursos.</p></div>';return}
+  const{data:ss}=await sb.from('sessoes').select('*').eq('turma_id',G.turma.id).order('numero');
+  const m=document.getElementById('amain');
+  m.innerHTML=`
+  <div class="pghdr"><h1>${G.turma.nome}</h1><p>${G.turma.cursos?.nome||''} · Activa ou desactiva cada sessão para os alunos</p></div>
+  <div class="panel">
+    <div class="ptit">Sessões — toggle para activar/desactivar</div>
+    ${ss?.map(s=>`<div class="srow">
+      <div class="snum ${s.ativa?'on':''}">${s.numero}</div>
+      <div class="sinf"><div class="stitle">${s.titulo}</div><div class="sdate">${s.data_sessao||'Data a definir'}</div></div>
+      <button class="tog ${s.ativa?'on':'off'}" id="tg-${s.id}" onclick="togSess('${s.id}',${s.ativa})"></button>
+    </div>`).join('')||'<div class="empty"><p>Sem sessões.</p></div>'}
+  </div>`;
+}
+
+async function togSess(id,cur){
+  await sb.from('sessoes').update({ativa:!cur}).eq('id',id);
+  const btn=document.getElementById('tg-'+id);
+  if(btn){btn.classList.toggle('on',!cur);btn.classList.toggle('off',cur)}
+  const row=btn?.closest('.srow')?.querySelector('.snum');
+  if(row)row.classList.toggle('on',!cur);
+  toast(!cur?'Sessão activada':'Sessão desactivada','s');
+}
+
+async function rAlunos(){
+  if(!G.turma){document.getElementById('amain').innerHTML='<div class="empty"><p>Selecciona uma turma em Cursos.</p></div>';return}
+  const[{data:al},{data:pr}]=await Promise.all([
+    sb.from('inscricoes').select('*,perfis(nome,email)').eq('turma_id',G.turma.id),
+    sb.from('progresso').select('*').eq('turma_id',G.turma.id)
+  ]);
+  const tp=SD.reduce((a,s)=>a+s.p.length,0);
+  document.getElementById('amain').innerHTML=`
+  <div class="pghdr"><h1>Alunos — ${G.turma.nome}</h1><p>${al?.length||0} aluno(s) inscrito(s)</p></div>
+  <div class="panel">
+    <div class="ptit">Lista de alunos</div>
+    ${al?.length?al.map(i=>{
+      const done=(pr||[]).filter(p=>p.user_id===i.user_id).length;
+      const pct=Math.round((done/tp)*100);
+      return`<div class="arow"><div class="aav">${ini(i.perfis?.nome||i.email)}</div><div class="ainf"><div class="anm">${i.perfis?.nome||'—'}</div><div class="aem">${i.email}</div></div><div class="pmini"><div class="pbar"><div class="pfill" style="width:${pct}%"></div></div><span class="ppct">${pct}%</span></div></div>`;
+    }).join(''):`<div class="empty" style="padding:1.25rem 0"><div class="ei">👥</div><p>Nenhum aluno inscrito.<br>Vai a <strong>Convites</strong> para gerar um link.</p></div>`}
+  </div>`;
+}
+
+async function rProg(){
+  if(!G.turma){document.getElementById('amain').innerHTML='<div class="empty"><p>Selecciona uma turma em Cursos.</p></div>';return}
+  const[{data:al},{data:pr},{data:ss}]=await Promise.all([
+    sb.from('inscricoes').select('*,perfis(nome)').eq('turma_id',G.turma.id),
+    sb.from('progresso').select('*').eq('turma_id',G.turma.id),
+    sb.from('sessoes').select('*').eq('turma_id',G.turma.id).order('numero')
+  ]);
+  if(!al?.length){document.getElementById('amain').innerHTML='<div class="empty"><div class="ei">📊</div><p>Nenhum aluno inscrito ainda.</p></div>';return}
+  const tp=SD.reduce((a,s)=>a+s.p.length,0);
+  document.getElementById('amain').innerHTML=`
+  <div class="pghdr"><h1>Progresso — ${G.turma.nome}</h1><p>Vista em tempo real · actualiza ao recarregar a página</p></div>
+  <div class="panel" style="overflow-x:auto">
+    <table class="ptbl">
+      <thead><tr><th style="min-width:110px">Aluno</th>${ss.map(s=>`<th title="${s.titulo}">S${s.numero}${s.ativa?'':'🔒'}</th>`).join('')}<th>Total</th></tr></thead>
+      <tbody>${al.map(i=>{
+        const up=(pr||[]).filter(p=>p.user_id===i.user_id);
+        const pct=Math.round((up.length/tp)*100);
+        return`<tr><td><strong>${i.perfis?.nome||'—'}</strong></td>${ss.map(s=>{
+          const sd=SD.find(x=>x.n===s.numero);const tot=sd?.p?.length||0;
+          return`<td>${Array.from({length:tot},(_,pi)=>`<span class="dot ${up.find(p=>p.sessao_numero===s.numero&&p.passo_index===pi)?'done':'todo'}"></span>`).join('')}</td>`;
+        }).join('')}<td><strong>${pct}%</strong></td></tr>`;
+      }).join('')}</tbody>
+    </table>
+  </div>`;
+}
+
+async function rConvites(){
+  if(!G.turma){document.getElementById('amain').innerHTML='<div class="empty"><p>Selecciona uma turma em Cursos.</p></div>';return}
+  const{data:cs}=await sb.from('convites').select('*').eq('turma_id',G.turma.id).order('criado_em',{ascending:false});
+  document.getElementById('atacts').innerHTML=`<button class="badd" onclick="gerarC()">+ Gerar convite</button>`;
+  document.getElementById('amain').innerHTML=`
+  <div class="pghdr"><h1>Convites — ${G.turma.nome}</h1><p>Cada aluno acede por um link único · um link por aluno</p></div>
+  <div class="panel">
+    <div class="ptit">Como funciona</div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:1rem">Gera um link e partilha com o aluno. Ao clicar, cria a conta e fica automaticamente inscrito nesta turma. Cada link é de uso único.</p>
+    ${cs?.length?cs.map(c=>{
+      const lnk=`${location.origin}?convite=${c.token}`;
+      return`<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:.5px solid var(--surf2)">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:11px;font-family:monospace;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${lnk}</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px">${new Date(c.criado_em).toLocaleString('pt-PT')} · ${c.usado?'<span style="color:var(--teal)">Utilizado</span>':'Disponível'}</div>
+        </div>
+        ${!c.usado?`<button class="cbtn" onclick="navigator.clipboard.writeText('${lnk}');toast('Copiado!','s')">Copiar</button>`:''}
+      </div>`;}).join(''):`<div class="empty" style="padding:1.25rem 0"><p>Nenhum convite gerado ainda.</p></div>`}
+  </div>`;
+}
+
+async function gerarC(){
+  await sb.from('convites').insert({turma_id:G.turma.id,email:'aberto'});
+  toast('Convite gerado!','s');rConvites();
+}
+
+function openMT(cid,cnome){
+  G.curso={id:cid,nome:cnome};
+  document.getElementById('mt-s').textContent=`Nova turma para: ${cnome}`;
+  openM('mt');
+}
+async function criarCurso(){
+  const c=document.getElementById('mc-c').value.trim(),n=document.getElementById('mc-n').value.trim(),d=document.getElementById('mc-d').value.trim();
+  if(!c||!n)return;
+  await sb.from('cursos').insert({codigo:c,nome:n,descricao:d});
+  closeM('mc');toast('Curso criado!','s');aNav('cu');
+}
+async function criarTurma(){
+  const c=document.getElementById('mt-c').value.trim(),n=document.getElementById('mt-n').value.trim(),i=document.getElementById('mt-i').value,f=document.getElementById('mt-f').value;
+  if(!c||!n)return;
+  const{data:t}=await sb.from('turmas').insert({curso_id:G.curso.id,codigo:c,nome:n,formador_nome:G.perfil?.nome,data_inicio:i||null,data_fim:f||null}).select().single();
+  if(t){
+    await sb.from('sessoes').insert(SD.map(s=>({turma_id:t.id,numero:s.n,titulo:s.t,ativa:s.n===1})));
+    G.turma=t;
+  }
+  closeM('mt');toast('Turma criada com 10 sessões!','s');showTurmaNav(true);aNav('se');
+}
+
+// ── STUDENT ───────────────────────────────────────────────────────
+async function loadStudent(){
+  const{data:insc}=await sb.from('inscricoes').select('*,turmas(*,cursos(*))').eq('user_id',G.user.id);
+  const main=document.getElementById('smain');
+  if(!insc?.length){main.innerHTML='<div class="empty" style="padding:4rem"><div class="ei">📭</div><p>Ainda não estás inscrito em nenhum curso.<br>Pede o link de convite ao teu formador.</p></div>';return}
+  const i0=insc[0];const turma=i0.turmas;const curso=turma?.cursos;
+  G.turma=turma;
+  const[{data:ss},{data:pr}]=await Promise.all([
+    sb.from('sessoes').select('*').eq('turma_id',turma.id).order('numero'),
+    sb.from('progresso').select('*').eq('user_id',G.user.id).eq('turma_id',turma.id)
+  ]);
+  const tp=SD.reduce((a,s)=>a+s.p.length,0);
+  const pct=Math.round(((pr||[]).length/tp)*100);
+  main.innerHTML=`
+  <div class="shero">
+    <div class="shero-bg"></div>
+    <div class="shero-rel">
+      <div class="shero-tag">${curso?.codigo||''} · ${turma?.nome||''}</div>
+      <div class="shero-t">${curso?.nome||''}</div>
+      <div class="shero-s">Formador: ${turma?.formador_nome||''} · ${turma?.data_inicio||''} → ${turma?.data_fim||''}</div>
+      <div class="sprog">
+        <div class="sprog-lbl"><span>O teu progresso total</span><span id="sppct">${pct}%</span></div>
+        <div class="sprog-bar"><div class="sprog-fill" id="spfill" style="width:${pct}%"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="scards" id="scards">
+    ${ss?.map(s=>{
+      const sd=SD.find(x=>x.n===s.numero);
+      const tp2=sd?.p?.length||0;
+      const dp=(pr||[]).filter(p=>p.sessao_numero===s.numero).length;
+      const allD=tp2>0&&dp===tp2;
+      const st=!s.ativa?'locked':allD?'done':'open';
+      const pl=s.ativa?(allD?'Concluído ✓':`${dp}/${tp2} passos`):'';
+      const passosH=s.ativa&&sd?sd.p.map((p,pi)=>{
+        const isDone=(pr||[]).some(x=>x.sessao_numero===s.numero&&x.passo_index===pi);
+        const sH=p.s?`<ul class="psubs">${p.s.map(x=>`<li>${x}</li>`).join('')}</ul>`:'';
+        return`<div class="passo">
+          <div class="pchk${isDone?' done':''}" id="pc-${s.numero}-${pi}" onclick="chkPasso(${s.numero},${pi},this,'${turma.id}')">${isDone?'✓':''}</div>
+          <div class="pbody">
+            <div class="ptitle">${p.t}</div>
+            <button class="pexp" onclick="togDet(this)">Ver instruções ↓</button>
+            <div class="pdet">${sH}</div>
+          </div>
+        </div>`;}).join(''):'';
+      return`<div class="sc">
+        <div class="schdr" onclick="togSC(this)">
+          <div class="scbadge ${st}">${allD?'✓':s.numero}</div>
+          <div class="scinfo">
+            <div class="sct">${s.titulo}</div>
+            <div class="scm">${s.data_sessao||''} ${s.ativa?`<span class="scprog">${pl}</span>`:''}</div>
+          </div>
+          ${!s.ativa?'<span style="font-size:13px">🔒</span>':`<span class="scarr">▼</span>`}
+        </div>
+        ${s.ativa?`<div class="scbody">${passosH}</div>`:''}
+      </div>`;}).join('')||''}
+  </div>`;
+}
+
+function togSC(h){
+  const b=h.nextElementSibling;if(!b?.classList.contains('scbody'))return;
+  b.classList.toggle('op');const a=h.querySelector('.scarr');if(a)a.classList.toggle('op',b.classList.contains('op'));
+}
+function togDet(btn){
+  const d=btn.nextElementSibling;d.classList.toggle('op');
+  btn.textContent=d.classList.contains('op')?'Ocultar instruções ↑':'Ver instruções ↓';
+}
+async function chkPasso(sn,pi,el,tid){
+  if(el.classList.contains('done'))return;
+  el.classList.add('done');el.textContent='✓';
+  await sb.from('progresso').upsert({user_id:G.user.id,turma_id:tid,sessao_numero:sn,passo_index:pi,concluido:true},{onConflict:'user_id,turma_id,sessao_numero,passo_index'});
+  const tp=SD.reduce((a,s)=>a+s.p.length,0);
+  const{data:pr}=await sb.from('progresso').select('id').eq('user_id',G.user.id).eq('turma_id',tid);
+  const pct=Math.round(((pr||[]).length/tp)*100);
+  const f=document.getElementById('spfill'),l=document.getElementById('sppct');
+  if(f)f.style.width=pct+'%';if(l)l.textContent=pct+'%';
+  toast('Passo concluído!','s');
+}
+
+// ── INVITE ────────────────────────────────────────────────────────
+async function checkInvite(){
+  const tok=new URLSearchParams(location.search).get('convite');
+  if(!tok)return false;
+  G.invTok=tok;
+  const{data:c}=await sb.from('convites').select('*,turmas(*,cursos(*))').eq('token',tok).single();
+  if(c){
+    document.getElementById('ic-curso').textContent=c.turmas?.cursos?.nome||'';
+    document.getElementById('ic-turma').textContent=c.turmas?.nome||'';
+    document.getElementById('ic-info').style.display='block';
+  }
+  return true;
+}
+function goAccept(){showOnly('auth');showAuth('af-reg')}
+async function processInvite(){
+  if(!G.invTok)return;
+  const{data:c}=await sb.from('convites').select('*').eq('token',G.invTok).single();
+  if(!c||c.usado){toast('Convite inválido ou já utilizado.','e');G.invTok=null;return}
+  const{data:ja}=await sb.from('inscricoes').select('id').eq('turma_id',c.turma_id).eq('user_id',G.user.id).single();
+  if(!ja){
+    await sb.from('inscricoes').insert({turma_id:c.turma_id,user_id:G.user.id,email:G.user.email,nome:G.perfil?.nome});
+    await sb.from('convites').update({usado:true}).eq('id',c.id);
+    toast('Inscrito com sucesso!','s');
+  }
+  G.invTok=null;history.replaceState({},'',location.pathname);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+(async()=>{
+  const isInv=await checkInvite();
+  const{data:{user}}=await sb.auth.getUser();
+  if(isInv&&!user){
+    showOnly('inv');
+    document.getElementById('inv').style.display='flex';
+    return;
+  }
+  if(user){await boot();return}
+  showOnly('auth');
+})();
+sb.auth.onAuthStateChange(ev=>{if(ev==='PASSWORD_RECOVERY')toast('Define a tua nova password','s')});
+</script>
+</body>
+</html>
